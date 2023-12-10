@@ -1,16 +1,22 @@
-import { StyleSheet } from 'react-native'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
+
+import { Text, View } from 'react-native'
 import axios from 'axios'
+import { useState, useEffect } from 'react'
+import CategoryTodoElement from '../components/CategoryTodoElement'
+import Head from 'expo-router/head'
 
-import EditScreenInfo from '../../components/EditScreenInfo'
-import { Text, View } from '../../components/Themed'
-import { useEffect, useState } from 'react'
-import TodoElement from '../../components/TodoElement'
-
-export default function TabOneScreen() {
+export default function Page() {
+  const { category } = useLocalSearchParams()
   const [todos, setTodos] = useState<Todo[]>([])
   const [unsortedDeadlines, setUnsortedDeadlines] = useState<Todo[]>([])
   const [noDeadlineTodos, setNoDeadlineTodos] = useState<Todo[]>([])
   const [allDataFormatted, setAllDataFormatted] = useState<boolean>(false)
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    navigation.setOptions({ title: category })
+  }, [navigation])
 
   function SortTodos() {
     let sortedTodos: Todo[] = unsortedDeadlines.sort((a, b) => {
@@ -26,7 +32,7 @@ export default function TabOneScreen() {
 
   useEffect(() => {
     axios
-      .get('http://192.168.1.106:9000/todos')
+      .get(`http://192.168.1.106:9000/oneCategory/${category}`)
       .then((res) => {
         res.data.map((objectTodo: Todo) => {
           if (objectTodo.deadline !== undefined) {
@@ -93,25 +99,13 @@ export default function TabOneScreen() {
   useEffect(() => {
     SortTodos()
   }, [allDataFormatted])
-
   return (
-    <View style={styles.container}>
-      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-      {/* <EditScreenInfo path='app/(tabs)/index.tsx' /> */}
-      {todos.map((todo) => (
-        <TodoElement key={todo._id} todo={todo} />
-      ))}
-    </View>
+    <>
+      <View>
+        {todos.map((todo) => (
+          <CategoryTodoElement key={todo._id} todo={todo} />
+        ))}
+      </View>
+    </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-})

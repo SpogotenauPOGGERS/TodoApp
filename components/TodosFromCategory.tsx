@@ -1,12 +1,10 @@
+import { Text, View } from 'react-native'
 import { StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import CategoryTodoElement from './CategoryTodoElement'
 
-import EditScreenInfo from '../../components/EditScreenInfo'
-import { Text, View } from '../../components/Themed'
-import { useEffect, useState } from 'react'
-import TodoElement from '../../components/TodoElement'
-
-export default function TabOneScreen() {
+const TodosFromCategory: React.FC<{ category: string }> = ({ category }) => {
   const [todos, setTodos] = useState<Todo[]>([])
   const [unsortedDeadlines, setUnsortedDeadlines] = useState<Todo[]>([])
   const [noDeadlineTodos, setNoDeadlineTodos] = useState<Todo[]>([])
@@ -26,7 +24,7 @@ export default function TabOneScreen() {
 
   useEffect(() => {
     axios
-      .get('http://192.168.1.106:9000/todos')
+      .get(`http://192.168.1.106:9000/oneCategory/${category}`)
       .then((res) => {
         res.data.map((objectTodo: Todo) => {
           if (objectTodo.deadline !== undefined) {
@@ -93,25 +91,11 @@ export default function TabOneScreen() {
   useEffect(() => {
     SortTodos()
   }, [allDataFormatted])
-
   return (
-    <View style={styles.container}>
-      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-      {/* <EditScreenInfo path='app/(tabs)/index.tsx' /> */}
+    <View>
       {todos.map((todo) => (
-        <TodoElement key={todo._id} todo={todo} />
+        <CategoryTodoElement key={todo._id} todo={todo} />
       ))}
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-})
