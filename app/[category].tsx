@@ -56,6 +56,7 @@ export default function Page() {
             const todo: Todo = {
               _id: objectTodo._id,
               title: objectTodo.title,
+              description: objectTodo.description,
               category: objectTodo.category,
               deadline: formattedDateString,
               color: objectTodo.color,
@@ -74,6 +75,7 @@ export default function Page() {
             const todo: Todo = {
               _id: objectTodo._id,
               title: objectTodo.title,
+              description: objectTodo.description,
               category: objectTodo.category,
               color: objectTodo.color,
               location: objectTodo.location,

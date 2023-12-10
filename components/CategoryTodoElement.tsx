@@ -6,6 +6,7 @@ interface TodoProps {
   todo: {
     _id: string
     title: string
+    description: string
     category: string
     deadline?: Date
     color: string
@@ -17,11 +18,11 @@ const CategoryTodoElement: React.FC<TodoProps> = ({ todo }) => {
   const todoStyle = StyleSheet.create({
     container: {
       width: 370,
-      height: 80,
       backgroundColor: `#${todo.color}`,
       paddingTop: 8,
       paddingLeft: 20,
       paddingRight: 24,
+      paddingBottom: 8,
       marginBottom: 12,
       borderRadius: 8,
       borderColor: 'black',
@@ -40,6 +41,7 @@ const CategoryTodoElement: React.FC<TodoProps> = ({ todo }) => {
         </Text>
       </View>
       <Text>{todo.location}</Text>
+      <Text>{todo.description}</Text>
     </View>
   )
 }
