@@ -111,29 +111,46 @@ export default function AddTodoScreen() {
     })
     console.log(reverseGeocodeLocation)
     setCity(reverseGeocodeLocation[0].city)
+    return reverseGeocodeLocation[0].city
   }
 
-  const uploadNewTodo = () => {
+  const uploadNewTodo = async () => {
+    console.log(city)
     console.log(value)
+    let color: string = ''
+    if (!isNewSelected) {
+      const res = await axios.get(
+        `http://192.168.1.106:9000/colorFromCategory/${value}`
+      )
+      color = res.data[0].color
+    } else color = colorValue
 
-    // if (toggleCheckBox) {
-    //   axios.post('http://192.168.1.106:9000/addTodo', {
-    //     title: title,
-    //     category: value,
-    //     description: description,
-    //     deadline: deadline,
-    //     color: colorValue,
-    //     location: city,
-    //   })
-    // } else {
-    //   axios.post('http://192.168.1.106:9000/addTodo', {
-    //     title: title,
-    //     category: value,
-    //     description: description,
-    //     color: colorValue,
-    //     location: city,
-    //   })
-    // }
+    if (toggleCheckBox) {
+      axios
+        .post('http://192.168.1.106:9000/addTodo', {
+          title: title,
+          category: value,
+          description: description,
+          deadline: deadline,
+          color: color,
+          location: await getLocation(),
+        })
+        .then(() => {
+          window.location.reload()
+        })
+    } else {
+      axios
+        .post('http://192.168.1.106:9000/addTodo', {
+          title: title,
+          category: value,
+          description: description,
+          color: color,
+          location: await getLocation(),
+        })
+        .then(() => {
+          window.location.reload()
+        })
+    }
   }
 
   return (
@@ -277,10 +294,9 @@ export default function AddTodoScreen() {
         <Button
           color={'black'}
           title='Create Todo'
-          onPress={async () => {
+          onPress={() => {
             setIsNewSelected(!isNewSelected)
             setValue(categories[0])
-            await getLocation()
             uploadNewTodo()
           }}
         />
