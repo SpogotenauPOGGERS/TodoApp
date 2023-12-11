@@ -114,24 +114,26 @@ export default function AddTodoScreen() {
   }
 
   const uploadNewTodo = () => {
-    if (toggleCheckBox) {
-      axios.post('http://192.168.1.106:9000/addTodo', {
-        title: title,
-        category: value,
-        description: description,
-        deadline: deadline,
-        color: colorValue,
-        location: city,
-      })
-    } else {
-      axios.post('http://192.168.1.106:9000/addTodo', {
-        title: title,
-        category: value,
-        description: description,
-        color: colorValue,
-        location: city,
-      })
-    }
+    console.log(value)
+
+    // if (toggleCheckBox) {
+    //   axios.post('http://192.168.1.106:9000/addTodo', {
+    //     title: title,
+    //     category: value,
+    //     description: description,
+    //     deadline: deadline,
+    //     color: colorValue,
+    //     location: city,
+    //   })
+    // } else {
+    //   axios.post('http://192.168.1.106:9000/addTodo', {
+    //     title: title,
+    //     category: value,
+    //     description: description,
+    //     color: colorValue,
+    //     location: city,
+    //   })
+    // }
   }
 
   return (
@@ -157,6 +159,7 @@ export default function AddTodoScreen() {
               style={styles.textInput}
               placeholder='Category'
               placeholderTextColor={'#575757'}
+              onChangeText={setValue}
             />
             <View style={{ width: 120 }}>
               <DropDownPicker
